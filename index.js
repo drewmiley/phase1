@@ -27,6 +27,7 @@ function preload() {
 }
 
 let cursors;
+let bombs;
 let platforms;
 let player;
 let stars;
@@ -84,14 +85,36 @@ function create () {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
+    bombs = this.physics.add.group();
+
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
+    this.physics.add.collider(bombs, platforms);
     function collectStar(player, star){
         star.disableBody(true, true);
         score += 10;
         scoreText.setText('Score: ' + score);
+
+        if (stars.countActive(true) === 0) {
+            stars.children.iterate(function(child) {
+                child.enableBody(true, child.x, 0, true, true);
+            });
+
+            const x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            const bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        }
     }
     this.physics.add.overlap(player, stars, collectStar, null, this);
+    function hitBomb(player, bomb){
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+    }
+    this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
 function update () {
