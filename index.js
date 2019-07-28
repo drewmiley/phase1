@@ -26,6 +26,7 @@ function preload() {
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
+let cursors;
 let platforms;
 let player;
 
@@ -66,8 +67,24 @@ function create () {
         repeat: -1
     });
 
+    cursors = this.input.keyboard.createCursorKeys();
+
     this.physics.add.collider(player, platforms);
 }
 
 function update () {
+    if (cursors.left.isDown) {
+        player.setVelocityX(-160);
+        player.anims.play('left', true);
+    } else if (cursors.right.isDown) {
+        player.setVelocityX(160);
+        player.anims.play('right', true);
+    } else {
+        player.setVelocityX(0);
+        player.anims.play('turn');
+    }
+
+    if (cursors.up.isDown && player.body.touching.down) {
+        player.setVelocityY(-330);
+    }
 }
