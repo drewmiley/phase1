@@ -29,10 +29,10 @@ function preload() {
 let cursors;
 let platforms;
 let player;
+let stars;
 
 function create () {
     this.add.image(400, 300, 'sky');
-    this.add.image(400, 300, 'star');
 
     platforms = this.physics.add.staticGroup();
 
@@ -69,7 +69,22 @@ function create () {
 
     cursors = this.input.keyboard.createCursorKeys();
 
+    stars = this.physics.add.group({
+        key: 'star',
+        repeat: 11,
+        setXY: { x: 12, y: 0, stepX: 70 }
+    });
+
+    stars.children.iterate(function(child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    });
+
     this.physics.add.collider(player, platforms);
+    this.physics.add.collider(stars, platforms);
+    function collectStar(player, star){
+        star.disableBody(true, true);
+    }
+    this.physics.add.overlap(player, stars, collectStar, null, this);
 }
 
 function update () {
