@@ -9,86 +9,107 @@ let stars;
 let score = 0;
 let scoreText;
 
-export function create() {
-    this.add.image(400, 300, AssetNames.Sky);
+const addSky = add => add.image(400, 300, AssetNames.Sky);
 
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+const addScoreText = (add, score) => add.text(16, 16, `score: ${ score }`, { fontSize: '32px', fill: '#000' });
 
-    platforms = this.physics.add.staticGroup();
-
+const addPlatforms = addPhysics => {
+    let platforms = addPhysics.staticGroup();
     platforms.create(400, 568, AssetNames.Ground).setScale(2).refreshBody();
 
     platforms.create(600, 400, AssetNames.Ground);
     platforms.create(50, 250, AssetNames.Ground);
     platforms.create(750, 220, AssetNames.Ground);
+    return platforms;
+}
 
-    player = this.physics.add.sprite(100, 450, AssetNames.Dude);
-
+const addPlayer = addPhysics => {
+    player = addPhysics.sprite(100, 450, AssetNames.Dude);
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+    return player;
+}
 
-    this.anims.create({
+const createAnimations = animations => {
+    animations.create({
         key: Animations.Left,
-        frames: this.anims.generateFrameNumbers(AssetNames.Dude, { start: 0, end: 3 }),
+        frames: animations.generateFrameNumbers(AssetNames.Dude, { start: 0, end: 3 }),
         frameRate: 10,
         repeat: -1
     });
 
-    this.anims.create({
+    animations.create({
         key: Animations.Turn,
         frames: [ { key: AssetNames.Dude, frame: 4 } ],
         frameRate: 20
     });
 
-    this.anims.create({
+    animations.create({
         key: Animations.Right,
-        frames: this.anims.generateFrameNumbers(AssetNames.Dude, { start: 5, end: 8 }),
+        frames: animations.generateFrameNumbers(AssetNames.Dude, { start: 5, end: 8 }),
         frameRate: 10,
         repeat: -1
     });
+}
 
-    cursors = this.input.keyboard.createCursorKeys();
-
-    stars = this.physics.add.group({
+const addStars = addPhysics => {
+    let stars = addPhysics.group({
         key: AssetNames.Star,
         repeat: 11,
         setXY: { x: 12, y: 0, stepX: 70 }
     });
 
-    stars.children.iterate(function(child) {
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
+    stars.children.iterate(child => child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
+    return stars;
+}
 
-    bombs = this.physics.add.group();
+const createBomb = (bombs, playerX) => {
+    const x = (playerX < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+    const bomb = bombs.create(x, 16, AssetNames.Bomb);
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+}
 
-    this.physics.add.collider(player, platforms);
-    this.physics.add.collider(stars, platforms);
-    this.physics.add.collider(bombs, platforms);
+export function create() {
+    const add = this.add;
+    const addPhysics = this.physics.add;
+    const animations = this.anims;
+
+    cursors = this.input.keyboard.createCursorKeys();
+
+    addSky(add);
+    scoreText = addScoreText(add, score);
+    platforms = addPlatforms(addPhysics);
+    player = addPlayer(addPhysics);
+    createAnimations(animations);
+    stars = addStars(addPhysics);
+    bombs = addPhysics.group();
+
+    addPhysics.collider(player, platforms);
+    addPhysics.collider(stars, platforms);
+    addPhysics.collider(bombs, platforms);
+
     function collectStar(player, star){
         star.disableBody(true, true);
         score += 10;
         scoreText.setText('Score: ' + score);
 
         if (stars.countActive(true) === 0) {
-            stars.children.iterate(function(child) {
-                child.enableBody(true, child.x, 0, true, true);
-            });
-
-            const x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-            const bomb = bombs.create(x, 16, AssetNames.Bomb);
-            bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
-            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            stars.children.iterate(child => child.enableBody(true, child.x, 0, true, true));
+            createBomb(bombs, player.x);
         }
     }
-    this.physics.add.overlap(player, stars, collectStar, null, this);
+
+    addPhysics.overlap(player, stars, collectStar, null, this);
+
     function hitBomb(player, bomb){
         this.physics.pause();
         player.setTint(0xff0000);
         player.anims.play(Animations.Turn);
     }
-    this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+    addPhysics.collider(player, bombs, hitBomb, null, this);
 }
 
 export function update() {
