@@ -71,6 +71,23 @@ const createBomb = (bombs, playerX) => {
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 }
 
+const turnLeft = player => {
+    player.setVelocityX(-1 * Velocity.x);
+    player.anims.play(Animations.Left, true);
+}
+
+const turnRight = player => {
+    player.setVelocityX(Velocity.x);
+    player.anims.play(Animations.Right, true);
+}
+
+const stop = player => {
+    player.setVelocityX(0);
+    player.anims.play(Animations.Turn);
+}
+
+const jump = player => player.setVelocityY(Velocity.y);
+
 export function create() {
     const add = this.add;
     const addPhysics = this.physics.add;
@@ -103,28 +120,22 @@ export function create() {
 
     addPhysics.overlap(player, stars, collectStar, null, this);
 
-    function hitBomb(player, bomb){
+    function gameOver(player, bomb){
         this.physics.pause();
-        player.setTint(0xff0000);
-        player.anims.play(Animations.Turn);
+        stop(player);
     }
 
-    addPhysics.collider(player, bombs, hitBomb, null, this);
+    addPhysics.collider(player, bombs, gameOver, null, this);
 }
 
 export function update() {
-    if (cursors.left.isDown) {
-        player.setVelocityX(-1 * Velocity.x);
-        player.anims.play(Animations.Left, true);
+    if (cursors.left.isDown == cursors.right.isDown) {
+        stop(player);
+    } else if (cursors.left.isDown) {
+        turnLeft(player);
     } else if (cursors.right.isDown) {
-        player.setVelocityX(Velocity.x);
-        player.anims.play(Animations.Right, true);
-    } else {
-        player.setVelocityX(0);
-        player.anims.play(Animations.Turn);
+        turnRight(player);
     }
 
-    if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(Velocity.y);
-    }
+    if (cursors.up.isDown && player.body.touching.down) { jump(player) }
 }
