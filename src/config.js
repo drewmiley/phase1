@@ -1,3 +1,9 @@
+import Sky from './assets/sky.png';
+import Platform from './assets/platform.png';
+import Star from './assets/star.png';
+import Bomb from './assets/bomb.png';
+import Dude from './assets/dude.png';
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
@@ -16,14 +22,12 @@ const config = {
     }
 };
 
-const game = new Phaser.Game(config);
-
 function preload() {
-    this.load.image('sky', 'assets/sky.png');
-    this.load.image('ground', 'assets/platform.png');
-    this.load.image('star', 'assets/star.png');
-    this.load.image('bomb', 'assets/bomb.png');
-    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.image('sky', Sky);
+    this.load.image('ground', Platform);
+    this.load.image('star', Star);
+    this.load.image('bomb', Bomb);
+    this.load.spritesheet('dude', Dude, { frameWidth: 32, frameHeight: 48 });
 }
 
 let cursors;
@@ -133,3 +137,5 @@ function update () {
         player.setVelocityY(-330);
     }
 }
+
+export default config;
