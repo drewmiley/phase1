@@ -1,8 +1,8 @@
-import Sky from './assets/sky.png';
-import Platform from './assets/platform.png';
-import Star from './assets/star.png';
-import Bomb from './assets/bomb.png';
-import Dude from './assets/dude.png';
+import Sky from '../assets/sky.png';
+import Platform from '../assets/platform.png';
+import Star from '../assets/star.png';
+import Bomb from '../assets/bomb.png';
+import Dude from '../assets/dude.png';
 
 const config = {
     type: Phaser.AUTO,
