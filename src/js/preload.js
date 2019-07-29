@@ -1,11 +1,12 @@
 import assets from '../assets';
+import { AssetNames } from './constants';
 
 function preload() {
-    this.load.image('sky', assets.Sky);
-    this.load.image('ground', assets.Platform);
-    this.load.image('star', assets.Star);
-    this.load.image('bomb', assets.Bomb);
-    this.load.spritesheet('dude', assets.Dude, { frameWidth: 32, frameHeight: 48 });
+    this.load.image(AssetNames.Sky, assets.Sky);
+    this.load.image(AssetNames.Ground, assets.Platform);
+    this.load.image(AssetNames.Star, assets.Star);
+    this.load.image(AssetNames.Bomb, assets.Bomb);
+    this.load.spritesheet(AssetNames.Dude, assets.Dude, { frameWidth: 32, frameHeight: 48 });
 }
 
 export default preload
