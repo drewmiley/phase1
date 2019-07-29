@@ -1,8 +1,4 @@
-import Sky from '../assets/sky.png';
-import Platform from '../assets/platform.png';
-import Star from '../assets/star.png';
-import Bomb from '../assets/bomb.png';
-import Dude from '../assets/dude.png';
+import assets from '../assets';
 
 const config = {
     type: Phaser.AUTO,
@@ -23,11 +19,11 @@ const config = {
 };
 
 function preload() {
-    this.load.image('sky', Sky);
-    this.load.image('ground', Platform);
-    this.load.image('star', Star);
-    this.load.image('bomb', Bomb);
-    this.load.spritesheet('dude', Dude, { frameWidth: 32, frameHeight: 48 });
+    this.load.image('sky', assets.Sky);
+    this.load.image('ground', assets.Platform);
+    this.load.image('star', assets.Star);
+    this.load.image('bomb', assets.Bomb);
+    this.load.spritesheet('dude', assets.Dude, { frameWidth: 32, frameHeight: 48 });
 }
 
 let cursors;
