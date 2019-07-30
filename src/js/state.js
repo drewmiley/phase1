@@ -1,4 +1,5 @@
-import * as helpers from './helpers';
+import * as environmentHelpers from './environmentHelpers';
+import * as playerHelpers from './playerHelpers';
 
 let cursors;
 let bombs;
@@ -16,14 +17,14 @@ const collectStar = (stars, score, scoreText) => (player, star) => {
 
     if (stars.countActive(true) === 0) {
         stars.children.iterate(child => child.enableBody(true, child.x, 0, true, true));
-        helpers.createBomb(bombs, player.x);
+        environmentHelpers.createBomb(bombs, player.x);
     }
 }
 
 const gameOver = (physics, scoreText) => (player, bomb) => {
     physics.pause();
     scoreText.setText('Game Over');
-    helpers.stop(player);
+    playerHelpers.stop(player);
 }
 
 export function create() {
@@ -33,12 +34,12 @@ export function create() {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    helpers.addSky(add);
-    scoreText = helpers.addScoreText(add, score);
-    platforms = helpers.addPlatforms(addPhysics);
-    player = helpers.addPlayer(addPhysics);
-    helpers.createAnimations(animations);
-    stars = helpers.addStars(addPhysics);
+    environmentHelpers.addSky(add);
+    scoreText = add.text(16, 16, `Score: ${ score }`, { fontSize: '32px', fill: '#000' });
+    platforms = environmentHelpers.addPlatforms(addPhysics);
+    player = playerHelpers.addPlayer(addPhysics);
+    playerHelpers.createAnimations(animations);
+    stars = environmentHelpers.addStars(addPhysics);
     bombs = addPhysics.group();
 
     addPhysics.collider(player, platforms);
@@ -50,12 +51,12 @@ export function create() {
 
 export function update() {
     if (cursors.left.isDown == cursors.right.isDown) {
-        helpers.stop(player);
+        playerHelpers.stop(player);
     } else if (cursors.left.isDown) {
-        helpers.turnLeft(player);
+        playerHelpers.turnLeft(player);
     } else if (cursors.right.isDown) {
-        helpers.turnRight(player);
+        playerHelpers.turnRight(player);
     }
 
-    if (cursors.up.isDown && player.body.touching.down) { helpers.jump(player) }
+    if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
 }
