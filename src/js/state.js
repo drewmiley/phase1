@@ -50,7 +50,7 @@ export function create() {
         environmentHelpers.createBomb(bombs, player.x);
         addPhysics.collider(bombs, platforms);
         addPhysics.collider(player, bombs, gameOver(this.physics), null, this);
-    }, 5000);
+    }, 1000);
 
     addPhysics.collider(player, platforms);
 }
