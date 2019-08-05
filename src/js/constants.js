@@ -12,6 +12,15 @@ export const AssetNames = {
     Star: 'star'
 }
 
+export const Dimensions = {
+    width: 800,
+    height: 600
+}
+
+export const Gravity = {
+    y: 300
+}
+
 export const Velocity = {
     x: 160,
     y: -330
