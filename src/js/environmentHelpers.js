@@ -2,16 +2,18 @@ import { AssetNames, Dimensions } from './constants';
 
 export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height - 350, AssetNames.Sky);
 
-const platformDimensions = [
-    { x: 0.75 * Dimensions.width, y: Dimensions.height - 200 },
-    { x: 0.0625 * Dimensions.width, y: Dimensions.height - 350 },
-    { x: 0.9375 * Dimensions.width, y: Dimensions.height - 380 }
-]
+const generatePlatformDimensions = ({width, height}) => {
+    return [
+        { x: 0.75 * width, y: height - 200 },
+        { x: 0.0625 * width, y: height - 350 },
+        { x: 0.9375 * width, y: height - 380 }
+    ]
+}
 
 export const addPlatforms = addPhysics => {
     let platforms = addPhysics.staticGroup();
     platforms.create(0.5 * Dimensions.width, Dimensions.height - 32, AssetNames.Ground).setScale(2).refreshBody()
-    platformDimensions.map(d => platforms.create(d.x, d.y, AssetNames.Ground));
+    generatePlatformDimensions(Dimensions).map(d => platforms.create(d.x, d.y, AssetNames.Ground));
     return platforms;
 }
 
