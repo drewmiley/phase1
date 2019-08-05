@@ -3,11 +3,14 @@ import { AssetNames, Dimensions } from './constants';
 export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height - 350, AssetNames.Sky);
 
 const generatePlatformDimensions = ({width, height}) => {
-    return [
-        { x: 0.75 * width, y: height - 200 },
-        { x: 0.0625 * width, y: height - 350 },
-        { x: 0.9375 * width, y: height - 380 }
-    ]
+    let heightReached = 0;
+    let platformDimensions = [];
+    while (heightReached < height) {
+        const heightDifference = Phaser.Math.Between(130, 180);
+        platformDimensions.push({ x: Phaser.Math.FloatBetween(0.0625, 0.9375) * width, y: height - (heightReached + heightDifference) });
+        heightReached += heightDifference;
+    }
+    return platformDimensions;
 }
 
 export const addPlatforms = addPhysics => {
