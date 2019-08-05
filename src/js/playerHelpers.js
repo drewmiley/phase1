@@ -1,4 +1,4 @@
-import { Animations, AssetNames, Dimensions, Velocity } from './constants';
+import { Animations, AssetNames, Dimensions, Gravity, Velocity } from './constants';
 
 export const addPlayer = addPhysics => addPhysics
     .sprite(0.125 * Dimensions.width, 0.75 * Dimensions.height, AssetNames.Dude)
@@ -37,3 +37,4 @@ export const stop = player => player
     .setVelocityX(0)
     .anims.play(Animations.Turn);
 export const jump = player => player.setVelocityY(Velocity.y);
+export const stomp = player => player.setVelocityY(player.body.velocity.y + 0.1 * Gravity.y);

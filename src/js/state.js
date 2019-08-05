@@ -65,4 +65,5 @@ export function update() {
     }
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
+    if (cursors.down.isDown && !player.body.touching.down) { playerHelpers.stomp(player) }
 }
