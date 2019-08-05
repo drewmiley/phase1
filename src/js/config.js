@@ -1,14 +1,15 @@
+import { Dimensions, Gravity } from './constants';
 import preload from './preload';
 import * as state from './state';
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: Dimensions.width,
+    height: Dimensions.height,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: Gravity,
             debug: false
         }
     },
