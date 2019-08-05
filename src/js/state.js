@@ -42,13 +42,13 @@ export function create() {
     bombs = addPhysics.group();
 
     setInterval(() => {
-        stars = environmentHelpers.addStars(addPhysics);
+        stars = environmentHelpers.addStars(addPhysics, player.y);
         addPhysics.collider(stars, platforms);
         addPhysics.overlap(player, stars, collectStar(stars), null, this);
     }, 5000);
 
     setInterval(() => {
-        environmentHelpers.createBomb(bombs, player.x);
+        environmentHelpers.createBomb(bombs, player.x, player.y);
         addPhysics.collider(bombs, platforms);
         addPhysics.collider(player, bombs, gameOver(this.physics), null, this);
     }, 1000);

@@ -15,22 +15,22 @@ export const addPlatforms = addPhysics => {
     return platforms;
 }
 
-export const addStars = addPhysics => {
+export const addStars = (addPhysics, playerY) => {
     const numberOfStars = 12;
     let stars = addPhysics.group({
         key: AssetNames.Star,
         repeat: numberOfStars - 1,
-        setXY: { x: 12, y: 0, stepX: 70 }
+        setXY: { x: 12, y: playerY - 660, stepX: 70 }
     });
     stars.children.iterate(child => child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
     return stars;
 }
 
-export const createBomb = (bombs, playerX) => {
+export const createBomb = (bombs, playerX, playerY) => {
     const x = (playerX < 0.5 * Dimensions.width) ?
         Phaser.Math.Between(0.5 * Dimensions.width, Dimensions.width) :
         Phaser.Math.Between(0, 0.5 * Dimensions.width);
-    const bomb = bombs.create(x, 16, AssetNames.Bomb);
+    const bomb = bombs.create(x, playerY - 660, AssetNames.Bomb);
     bomb.setBounce(1);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 }
