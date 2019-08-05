@@ -1,12 +1,12 @@
 import { AssetNames, Dimensions } from './constants';
 
-export const addSky = add => add.image(400, 250, AssetNames.Sky);
+export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height - 350, AssetNames.Sky);
 
 const platformDimensions = [
-    { x: 400, y: 568, ground: true },
-    { x: 600, y: 400 },
-    { x: 50, y: 250 },
-    { x: 750, y: 220 }
+    { x: 0.5 * Dimensions.width, y: Dimensions.height - 32, ground: true },
+    { x: 0.75 * Dimensions.width, y: Dimensions.height - 200 },
+    { x: 0.0625 * Dimensions.width, y: Dimensions.height - 350 },
+    { x: 0.9375 * Dimensions.width, y: Dimensions.height - 380 }
 ]
 
 export const addPlatforms = addPhysics => {

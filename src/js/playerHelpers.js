@@ -1,7 +1,7 @@
 import { Animations, AssetNames, Dimensions, Gravity, Velocity } from './constants';
 
 export const addPlayer = addPhysics => addPhysics
-    .sprite(0.125 * Dimensions.width, 0.75 * Dimensions.height, AssetNames.Dude)
+    .sprite(0.125 * Dimensions.width, Dimensions.height - 200, AssetNames.Dude)
     .setBounce(0.2)
     .setCollideWorldBounds(true);
 

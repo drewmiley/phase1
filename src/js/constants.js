@@ -14,7 +14,7 @@ export const AssetNames = {
 
 export const Dimensions = {
     width: 800,
-    height: 1000
+    height: 3600
 }
 
 export const Gravity = {
