@@ -27,6 +27,7 @@ const gameOver = physics => (player, bomb) => {
 }
 
 export function create() {
+    console.log(this);
     const add = this.add;
     const addPhysics = this.physics.add;
     const animations = this.anims;
