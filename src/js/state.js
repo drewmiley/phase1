@@ -57,6 +57,11 @@ export function create() {
 }
 
 export function update() {
+    if (player.y === 0) {
+        this.physics.pause();
+        scoreText.setText(`Game Complete - Score: ${ score }`);
+        playerHelpers.stop(player);
+    }
     if (cursors.left.isDown == cursors.right.isDown) {
         playerHelpers.stop(player);
     } else if (cursors.left.isDown) {
