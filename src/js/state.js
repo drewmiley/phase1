@@ -57,7 +57,7 @@ export function create() {
 }
 
 export function update() {
-    if (player.y === 0) {
+    if (player.y < 50) {
         this.physics.pause();
         scoreText.setText(`Game Complete - Score: ${ score }`);
         playerHelpers.stop(player);

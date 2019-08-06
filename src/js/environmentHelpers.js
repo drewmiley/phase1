@@ -5,10 +5,16 @@ export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height
 const generatePlatformDimensions = ({width, height}) => {
     let heightReached = 0;
     let platformDimensions = [];
-    while (heightReached < height) {
+    let previousWidthProp = null;
+    while (heightReached < height - 50) {
         const heightDifference = Phaser.Math.Between(130, 180);
-        platformDimensions.push({ x: Phaser.Math.FloatBetween(0.0625, 0.9375) * width, y: height - (heightReached + heightDifference) });
+        let widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.25 ? 0.25: 0.0625, previousWidthProp > 0.75 ? 0.75 : 0.9375);
+        while (Math.abs(widthProp - previousWidthProp) < 0.025) {
+            widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.25 ? 0.25: 0.0625, previousWidthProp > 0.75 ? 0.75 : 0.9375);
+        }
+        platformDimensions.push({ x: widthProp * width, y: height - (heightReached + heightDifference) });
         heightReached += heightDifference;
+        previousWidthProp = widthProp;
     }
     return platformDimensions;
 }
