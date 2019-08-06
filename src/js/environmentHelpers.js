@@ -8,9 +8,9 @@ const generatePlatformDimensions = ({width, height}) => {
     let previousWidthProp = null;
     while (heightReached < height - 50) {
         const heightDifference = Phaser.Math.Between(130, 180);
-        let widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.25 ? 0.25: 0.0625, previousWidthProp > 0.75 ? 0.75 : 0.9375);
-        while (Math.abs(widthProp - previousWidthProp) < 0.025) {
-            widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.25 ? 0.25: 0.0625, previousWidthProp > 0.75 ? 0.75 : 0.9375);
+        let widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.5 ? 0.5: 0.0625, previousWidthProp > 0.5 ? 0.5 : 0.9375);
+        while (Math.abs(widthProp - previousWidthProp) < 0.1) {
+            widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.5 ? 0.5: 0.0625, previousWidthProp > 0.5 ? 0.5 : 0.9375);
         }
         platformDimensions.push({ x: widthProp * width, y: height - (heightReached + heightDifference) });
         heightReached += heightDifference;
