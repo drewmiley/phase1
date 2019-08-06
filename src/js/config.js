@@ -5,7 +5,7 @@ import * as state from './state';
 const config = {
     type: Phaser.AUTO,
     width: Dimensions.width,
-    height: Dimensions.height,
+    height: Dimensions.height / 6,
     physics: {
         default: 'arcade',
         arcade: {

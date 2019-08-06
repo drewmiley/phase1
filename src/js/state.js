@@ -27,7 +27,8 @@ const gameOver = physics => (player, bomb) => {
 }
 
 export function create() {
-    console.log(this);
+    this.cameras.main.setBounds(0, 3000, 800, 3600);
+    this.physics.world.setBounds(0, 0, 800, 3600);
     const add = this.add;
     const addPhysics = this.physics.add;
     const animations = this.anims;
@@ -54,6 +55,8 @@ export function create() {
     }, 5000);
 
     addPhysics.collider(player, platforms);
+
+    this.cameras.main.startFollow(player);
 }
 
 export function update() {
@@ -69,6 +72,7 @@ export function update() {
     } else if (cursors.right.isDown) {
         playerHelpers.turnRight(player);
     }
+    this.cameras.main.setBounds(0, Math.min(player.y - 600, 2400), 800, Math.min(player.y, 3000));
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
     if (cursors.down.isDown && !player.body.touching.down) { playerHelpers.stomp(player) }
