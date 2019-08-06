@@ -43,5 +43,6 @@ export const createBomb = (bombs, playerX, playerY) => {
         Phaser.Math.Between(0, 0.5 * Dimensions.width);
     const bomb = bombs.create(x, playerY - 660, AssetNames.Bomb);
     bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 }
