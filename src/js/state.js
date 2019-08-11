@@ -72,7 +72,9 @@ export function update() {
     } else if (cursors.right.isDown) {
         playerHelpers.turnRight(player);
     }
-    this.cameras.main.setBounds(0, Math.min(player.y - 600, 2400), 800, Math.min(player.y, 3000));
+    console.log(player.y)
+    this.cameras.main.setBounds(0, player.y - 600, 800, player.y);
+    console.log(this.cameras.main._bounds);
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
     if (cursors.down.isDown && !player.body.touching.down) { playerHelpers.stomp(player) }
