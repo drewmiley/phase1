@@ -55,8 +55,6 @@ export function create() {
     }, 5000);
 
     addPhysics.collider(player, platforms);
-
-    this.cameras.main.startFollow(player);
 }
 
 export function update() {
@@ -72,9 +70,13 @@ export function update() {
     } else if (cursors.right.isDown) {
         playerHelpers.turnRight(player);
     }
-    console.log(player.y)
-    this.cameras.main.setBounds(0, player.y - 600, 800, player.y);
-    console.log(this.cameras.main._bounds);
+    if (player.y < 3300) {
+        this.cameras.main.startFollow(player);
+        this.cameras.main.setBounds(0, player.y - 600, 800, player.y);
+    } else {
+        this.cameras.main.stopFollow(player);
+        this.cameras.main.setBounds(0, 3000, 800, 3600);
+    }
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
     if (cursors.down.isDown && !player.body.touching.down) { playerHelpers.stomp(player) }
