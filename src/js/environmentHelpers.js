@@ -1,40 +1,44 @@
-import { AssetNames, Dimensions } from './constants';
+import { AssetNames, Dimensions, WorldBounds } from './constants';
 
-export const addSky = add => add.image(400, 250, AssetNames.Sky);
+export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height - 350, AssetNames.Sky);
 
-const platformDimensions = [
-    { x: 400, y: 568, ground: true },
-    { x: 600, y: 400 },
-    { x: 50, y: 250 },
-    { x: 750, y: 220 }
-]
+const generatePlatformDimensions = ({width, height}) => {
+    let heightReached = 0;
+    let platformDimensions = [];
+    let previousWidthProp = null;
+    while (heightReached < height - 50) {
+        const heightDifference = Phaser.Math.Between(130, 160);
+        const widthProp = Phaser.Math.FloatBetween( previousWidthProp < 0.5 ? 0.55: 0.0625, previousWidthProp > 0.5 ? 0.45 : 0.9375);
+        platformDimensions.push({ x: widthProp * width, y: height - (heightReached + heightDifference) });
+        heightReached += heightDifference;
+        previousWidthProp = widthProp;
+    }
+    return platformDimensions;
+}
 
 export const addPlatforms = addPhysics => {
     let platforms = addPhysics.staticGroup();
-    platformDimensions.map(d => {
-        d.ground ?
-        platforms.create(d.x, d.y, AssetNames.Ground).setScale(2).refreshBody() :
-        platforms.create(d.x, d.y, AssetNames.Ground);
-    });
+    platforms.create(0.5 * Dimensions.width, Dimensions.height - 32, AssetNames.Ground).setScale(2).refreshBody()
+    generatePlatformDimensions(Dimensions).map(d => platforms.create(d.x, d.y, AssetNames.Ground));
     return platforms;
 }
 
-export const addStars = addPhysics => {
+export const addStars = (addPhysics, playerY) => {
     const numberOfStars = 12;
     let stars = addPhysics.group({
         key: AssetNames.Star,
         repeat: numberOfStars - 1,
-        setXY: { x: 12, y: 0, stepX: 70 }
+        setXY: { x: 12, y: playerY - 1.1 * WorldBounds.height, stepX: 70 }
     });
     stars.children.iterate(child => child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
     return stars;
 }
 
-export const createBomb = (bombs, playerX) => {
+export const createBomb = (bombs, playerX, playerY) => {
     const x = (playerX < 0.5 * Dimensions.width) ?
         Phaser.Math.Between(0.5 * Dimensions.width, Dimensions.width) :
         Phaser.Math.Between(0, 0.5 * Dimensions.width);
-    const bomb = bombs.create(x, 16, AssetNames.Bomb);
+    const bomb = bombs.create(x, playerY - 1.1 * WorldBounds.height, AssetNames.Bomb);
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);

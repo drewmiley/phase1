@@ -1,11 +1,11 @@
-import { Dimensions, Gravity } from './constants';
+import { Gravity, WorldBounds } from './constants';
 import preload from './preload';
 import * as state from './state';
 
 const config = {
     type: Phaser.AUTO,
-    width: Dimensions.width,
-    height: Dimensions.height,
+    width: WorldBounds.width,
+    height: WorldBounds.height,
     physics: {
         default: 'arcade',
         arcade: {

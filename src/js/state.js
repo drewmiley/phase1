@@ -1,3 +1,4 @@
+import { Dimensions, WorldBounds } from './constants';
 import * as environmentHelpers from './environmentHelpers';
 import * as playerHelpers from './playerHelpers';
 
@@ -27,6 +28,8 @@ const gameOver = physics => (player, bomb) => {
 }
 
 export function create() {
+    this.cameras.main.setBounds(0, Dimensions.height - WorldBounds.height, Dimensions.width, Dimensions.height);
+    this.physics.world.setBounds(0, 0, Dimensions.width, Dimensions.height);
     const add = this.add;
     const addPhysics = this.physics.add;
     const animations = this.anims;
@@ -41,13 +44,13 @@ export function create() {
     bombs = addPhysics.group();
 
     setInterval(() => {
-        stars = environmentHelpers.addStars(addPhysics);
+        stars = environmentHelpers.addStars(addPhysics, player.y);
         addPhysics.collider(stars, platforms);
         addPhysics.overlap(player, stars, collectStar(stars), null, this);
     }, 5000);
 
     setInterval(() => {
-        environmentHelpers.createBomb(bombs, player.x);
+        environmentHelpers.createBomb(bombs, player.x, player.y);
         addPhysics.collider(bombs, platforms);
         addPhysics.collider(player, bombs, gameOver(this.physics), null, this);
     }, 5000);
@@ -56,12 +59,28 @@ export function create() {
 }
 
 export function update() {
+    if (player.y < 50) {
+        this.physics.pause();
+        scoreText.setText(`Game Complete - Score: ${ score }`);
+        playerHelpers.stop(player);
+    }
     if (cursors.left.isDown == cursors.right.isDown) {
         playerHelpers.stop(player);
     } else if (cursors.left.isDown) {
         playerHelpers.turnLeft(player);
     } else if (cursors.right.isDown) {
         playerHelpers.turnRight(player);
+    }
+    // TODO: Refactor this
+    if (player.y < Dimensions.height - 0.5 * WorldBounds.height) {
+        this.cameras.main.startFollow(player);
+        this.cameras.main.setBounds(0, player.y - 0.5 * WorldBounds.height, Dimensions.width, player.y + 0.5 * WorldBounds.height);
+    } else if (player.y < 0.5 * WorldBounds.height) {
+        this.cameras.main.stopFollow(player);
+        this.cameras.main.setBounds(0, 0, Dimensions.width, WorldBounds.height);
+    } else {
+        this.cameras.main.stopFollow(player);
+        this.cameras.main.setBounds(0, Dimensions.height - WorldBounds.height, Dimensions.width, Dimensions.height);
     }
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }
