@@ -1,4 +1,4 @@
-import { AssetNames, Dimensions } from './constants';
+import { AssetNames, Dimensions, WorldBounds } from './constants';
 
 export const addSky = add => add.image(0.5 * Dimensions.width, Dimensions.height - 350, AssetNames.Sky);
 
@@ -28,7 +28,7 @@ export const addStars = (addPhysics, playerY) => {
     let stars = addPhysics.group({
         key: AssetNames.Star,
         repeat: numberOfStars - 1,
-        setXY: { x: 12, y: playerY - 660, stepX: 70 }
+        setXY: { x: 12, y: playerY - 1.1 * WorldBounds.height, stepX: 70 }
     });
     stars.children.iterate(child => child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
     return stars;
@@ -38,7 +38,7 @@ export const createBomb = (bombs, playerX, playerY) => {
     const x = (playerX < 0.5 * Dimensions.width) ?
         Phaser.Math.Between(0.5 * Dimensions.width, Dimensions.width) :
         Phaser.Math.Between(0, 0.5 * Dimensions.width);
-    const bomb = bombs.create(x, playerY - 660, AssetNames.Bomb);
+    const bomb = bombs.create(x, playerY - 1.1 * WorldBounds.height, AssetNames.Bomb);
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);

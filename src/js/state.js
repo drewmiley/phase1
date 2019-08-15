@@ -1,3 +1,4 @@
+import { Dimensions, WorldBounds } from './constants';
 import * as environmentHelpers from './environmentHelpers';
 import * as playerHelpers from './playerHelpers';
 
@@ -27,8 +28,8 @@ const gameOver = physics => (player, bomb) => {
 }
 
 export function create() {
-    this.cameras.main.setBounds(0, 3000, 800, 3600);
-    this.physics.world.setBounds(0, 0, 800, 3600);
+    this.cameras.main.setBounds(0, Dimensions.height - WorldBounds.height, Dimensions.width, Dimensions.height);
+    this.physics.world.setBounds(0, 0, Dimensions.width, Dimensions.height);
     const add = this.add;
     const addPhysics = this.physics.add;
     const animations = this.anims;
@@ -70,12 +71,16 @@ export function update() {
     } else if (cursors.right.isDown) {
         playerHelpers.turnRight(player);
     }
-    if (player.y < 3300) {
+    // TODO: Refactor this
+    if (player.y < Dimensions.height - 0.5 * WorldBounds.height) {
         this.cameras.main.startFollow(player);
-        this.cameras.main.setBounds(0, player.y - 600, 800, player.y);
+        this.cameras.main.setBounds(0, player.y - 0.5 * WorldBounds.height, Dimensions.width, player.y + 0.5 * WorldBounds.height);
+    } else if (player.y < 0.5 * WorldBounds.height) {
+        this.cameras.main.stopFollow(player);
+        this.cameras.main.setBounds(0, 0, Dimensions.width, WorldBounds.height);
     } else {
         this.cameras.main.stopFollow(player);
-        this.cameras.main.setBounds(0, 3000, 800, 3600);
+        this.cameras.main.setBounds(0, Dimensions.height - WorldBounds.height, Dimensions.width, Dimensions.height);
     }
 
     if (cursors.up.isDown && player.body.touching.down) { playerHelpers.jump(player) }

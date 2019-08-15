@@ -26,7 +26,7 @@ export const Velocity = {
     y: -330
 }
 
-const WorldBounds = {
+export const WorldBounds = {
     width: 800,
-    height: 3600
+    height: 600
 }
